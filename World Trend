@@ -15,10 +15,10 @@ consumer_secret = 'a3Y1S2DXVkbRoGaO3NMgstbGm4LSAyRnKSeShseZFrFqWmTwJo'
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, consumer_key, consumer_secret)
 twit_api = Twitter(auth=oauth)
 
-#World Trends
+# World Trends
 world_trends = twit_api.trends.available(_woeid=1)
 
-#NYC Trends
+# NYC Trends
 from pandas.io.json import json_normalize
 df = json_normalize(world_trends)
 df[df.name == 'New York']
@@ -28,7 +28,7 @@ nyc_result = ny_trends.sort('tweet_volume', ascending = False)
 from matplotlib import pyplot as plt
 nyc_result.plot('name','tweet_volume', kind='bar')
 
-#Nashville Trends
+# Nashville Trends
 df[df.name == 'Nashville']
 nashville_trends = twit_api.trends.place(_id=2457170 )
 nash_trends = json_normalize(nashville_trends,'trends')
