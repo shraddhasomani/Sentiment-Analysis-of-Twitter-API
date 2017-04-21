@@ -1,0 +1,37 @@
+import pip
+pip.main(["install","twitter"])
+import pandas as pd
+import json
+import twitter
+from twitter import Twitter 
+from twitter import OAuth 
+from twitter import TwitterHTTPError 
+from twitter import TwitterStream 
+
+ACCESS_TOKEN = '3151548164-KGXKM6vZipCfBfIA16bUxBaNhIcg7CmfiYb6iWU'
+ACCESS_SECRET = '8qKGbi5JRnrZb3yKcKijbYxVHVZ4lFonuQDsN3dWonzao'
+consumer_key = 'nqn05e7YWcj57FBzJhu2vJpQU'
+consumer_secret = 'a3Y1S2DXVkbRoGaO3NMgstbGm4LSAyRnKSeShseZFrFqWmTwJo'
+oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, consumer_key, consumer_secret)
+twit_api = Twitter(auth=oauth)
+
+#World Trends
+world_trends = twit_api.trends.available(_woeid=1)
+
+#NYC Trends
+from pandas.io.json import json_normalize
+df = json_normalize(world_trends)
+df[df.name == 'New York']
+nyc_trends = twit_api.trends.place(_id = 2459115)
+ny_trends = json_normalize(nyc_trends,'trends')
+nyc_result = ny_trends.sort('tweet_volume', ascending = False)
+from matplotlib import pyplot as plt
+nyc_result.plot('name','tweet_volume', kind='bar')
+
+#Nashville Trends
+df[df.name == 'Nashville']
+nashville_trends = twit_api.trends.place(_id=2457170 )
+nash_trends = json_normalize(nashville_trends,'trends')
+nash_result = nash_trends.sort('tweet_volume', ascending = False)
+from matplotlib import pyplot as plt
+nash_result.plot('name','tweet_volume', kind='bar')
